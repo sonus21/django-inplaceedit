@@ -21,6 +21,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
+from django.utils.safestring import mark_safe
 
 from inplaceeditform.commons import (get_dict_from_obj, apply_filters,
                                      get_adaptor_class)
@@ -51,7 +52,7 @@ def save_ajax(request):
         if form.is_valid():
             adaptor.save(value_edit_with_filter)
             return _get_http_response({'errors': False,
-                                       'value': adaptor.render_value_edit()})
+                                       'value': mark_safe(adaptor.render_value_edit())})
         messages = []  # The error is for another field that you are editing
         for field_name_error, errors_field in form.errors.items():
             for error in errors_field:
